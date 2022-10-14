@@ -1,0 +1,3106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="TelemedCare" id="Project-1f8a" database="PostgreSQL" >
+	<schema name="alarms" >
+		<table name="action_types" prior="alarm_action_types" >
+			<comment><![CDATA[Action type of alarms that can be generated in the application.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Action alarm type Identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="20" jt="12" mandatory="y" >
+				<comment><![CDATA[Action alarm type code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Action alarm type description]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_alarm_action_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="alarm_actions" prior="alarms_0" >
+			<comment><![CDATA[Definition of the alarms generated when applying the rules on a measure.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Alarm action Identificador.]]></comment>
+			</column>
+			<column name="alarms_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier on the alarm that has generated an action.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" >
+				<comment><![CDATA[User who has generated the action on the alarm.]]></comment>
+			</column>
+			<column name="action_type_id" type="uuid" jt="102" mandatory="y" />
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_alarm_actions" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_alarm_actions_alarms" to_schema="alarms" to_table="alarms" >
+				<fk_column name="alarms_id" pk="id" />
+			</fk>
+			<fk name="fk_alarm_actions_action_types" to_schema="alarms" to_table="action_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="action_type_id" pk="id" />
+			</fk>
+			<fk name="fk_alarm_actions_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+		</table>
+		<table name="alarm_types" prior="alarms_0" >
+			<comment><![CDATA[Type of alarms that can be generated in the application.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Alarm type Identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="20" jt="12" mandatory="y" >
+				<comment><![CDATA[Alarm type code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Alarm type description]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_alarm_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="alarms" prior="alerts" >
+			<comment><![CDATA[Definition of the alarms generated when applying the rules on a measure.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Alarms Identificador.]]></comment>
+			</column>
+			<column name="alarm_type_id" prior="alarm_type" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Type of alarm that has been generated.]]></comment>
+			</column>
+			<column name="priority" type="integer" jt="4" mandatory="y" >
+				<comment><![CDATA[Alarm priority.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_alarms" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_alarms_measures" to_schema="measurements" to_table="measures" delete_action="restrict" update_action="restrict" />
+			<fk name="fk_alarms_alarm_types" to_schema="alarms" to_table="alarm_types" >
+				<fk_column name="alarm_type_id" pk="id" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="devices" >
+		<table name="device_registration_states" prior="devices_0" >
+			<comment><![CDATA[Device registration state.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Device registration state identifier.]]></comment>
+			</column>
+			<column name="code" prior="hw_serialnumber" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[Device registration state code.]]></comment>
+			</column>
+			<column name="description" prior="serialnumber" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Device registration state description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_device_registration_states" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="device_statuses" prior="device_registration_states_0" >
+			<comment><![CDATA[Device statuses.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Device status identifier.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[Device status code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Device status description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_device_statuses" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="device_types" prior="devices_0" >
+			<comment><![CDATA[Description of the different types of devices.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Device type identifier.]]></comment>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Device type name.]]></comment>
+			</column>
+			<column name="config_actions" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_basic" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_chat" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_commands" prior="config_commangs" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_max_patients" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_notifications" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_patients" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_peripherals" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_sip" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_specs" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_status" type="integer" length="1" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_telecare" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_video" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="config_wifi" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="download_link" type="varchar" length="200" jt="12" mandatory="y" >
+				<comment><![CDATA[Link that allows you to download the version of the device.]]></comment>
+			</column>
+			<column name="status_periodicity" type="integer" length="1" jt="4" >
+				<comment><![CDATA[How often the device sends its status.]]></comment>
+			</column>
+			<column name="version" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Device lastest version.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_device_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="devices" prior="tbl" >
+			<comment><![CDATA[Device data.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Device identifier.]]></comment>
+			</column>
+			<column name="device_registration_state_id" prior="device_state_id" type="uuid" jt="102" >
+				<comment><![CDATA[Device registration status identifier.]]></comment>
+			</column>
+			<column name="device_status_id" type="uuid" length="1" jt="102" >
+				<comment><![CDATA[State in which the device is currently.]]></comment>
+			</column>
+			<column name="device_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Device type.]]></comment>
+			</column>
+			<column name="gmp_id" type="integer" jt="4" >
+				<comment><![CDATA[-- Pending]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the group to which the device belongs.]]></comment>
+			</column>
+			<column name="serialnumber" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Device serial number.]]></comment>
+			</column>
+			<column name="hw_serialnumber" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[Hardware serial number of the device.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_devices" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_devices_device_types" to_schema="devices" to_table="device_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="device_type_id" pk="id" />
+			</fk>
+			<fk name="fk_devices_goups" to_schema="groups" to_table="goups" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+			<fk name="fk_devices_device_registration_states" to_schema="devices" to_table="device_registration_states" delete_action="restrict" update_action="restrict" >
+				<fk_column name="device_registration_state_id" pk="id" />
+			</fk>
+			<fk name="fk_devices_device_statuses" to_schema="devices" to_table="device_statuses" delete_action="restrict" update_action="restrict" >
+				<fk_column name="device_status_id" pk="id" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="events" />
+	<schema name="groups" >
+		<table name="dashboards" prior="tbl" >
+			<comment><![CDATA[Definition of the visible dashboards for each group.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Dashboard identifier.]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Group to which the dashboard belongs.]]></comment>
+			</column>
+			<column name="shield" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the dashboard is hidden.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_dashboards" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_dashboards_goups" to_schema="groups" to_table="goups" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+		</table>
+		<table name="device_licenses" prior="groups_device_licenses" >
+			<comment><![CDATA[Configuration of the license by type of device.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Device license identifier.]]></comment>
+			</column>
+			<column name="license_id" prior="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[License to which the device license configuration is associated.]]></comment>
+			</column>
+			<column name="device_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Type of device being configured.]]></comment>
+			</column>
+			<column name="max_num_devices" type="smallint" jt="5" >
+				<comment><![CDATA[Maximum number of devices allowed for this license.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_device_licenses" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_device_licenses_licenses" to_schema="groups" to_table="licenses" delete_action="restrict" update_action="restrict" >
+				<fk_column name="license_id" pk="group_id" />
+			</fk>
+		</table>
+		<table name="goups" prior="goup" spec="" >
+			<comment><![CDATA[Definition of the groups.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Group identifier.]]></comment>
+			</column>
+			<column name="parent_id" type="uuid" jt="102" >
+				<comment><![CDATA[Identifier of the parent group to which this group belongs.]]></comment>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Group name.]]></comment>
+			</column>
+			<column name="max_device_type_per_user" type="smallint" jt="5" mandatory="y" >
+				<defo><![CDATA[0]]></defo>
+				<comment><![CDATA[Maximum number of devices by type and user.]]></comment>
+			</column>
+			<column name="ghost" type="boolean" jt="-7" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the devices are shared with the parent group.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.registro.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_goups" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="idx_goups_parent_id" unique="NORMAL" >
+				<column name="parent_id" />
+			</index>
+			<fk name="fk_goups_parent_groups" to_schema="groups" to_table="goups" options="" >
+				<fk_column name="parent_id" pk="id" />
+			</fk>
+		</table>
+		<table name="licenses" prior="user_licenses_0" >
+			<comment><![CDATA[Configuration of the license of a group.]]></comment>
+			<column name="group_id" prior="license_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the group to which the license belongs.]]></comment>
+			</column>
+			<column name="start_date" type="date" jt="91" mandatory="y" >
+				<comment><![CDATA[Date on which the license is available.]]></comment>
+			</column>
+			<column name="end_date" type="date" jt="91" >
+				<comment><![CDATA[Date on which the license is no longer available.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_licenses" unique="PRIMARY_KEY" >
+				<column name="group_id" />
+			</index>
+			<fk name="fk_licenses_goups" to_schema="groups" to_table="goups" delete_action="restrict" update_action="restrict" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+		</table>
+		<table name="messages" prior="service_number_types_0" >
+			<comment><![CDATA[Group messages that are displayed on the news screen of the application.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Group message identifier.]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Group to which the service number belongs.]]></comment>
+			</column>
+			<column name="message" prior="code" type="varchar" length="1000" jt="12" >
+				<comment><![CDATA[Text of the message.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_messages" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_messages_groups" to_schema="groups" to_table="goups" delete_action="restrict" update_action="restrict" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+		</table>
+		<table name="reports" prior="messages_0" >
+			<comment><![CDATA[Definition of the format of the reports generated for the users.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Report identifier.]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the group to which the report belongs.]]></comment>
+			</column>
+			<column name="name" prior="text" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Report name.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_reports" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_reports_groups" to_schema="groups" to_table="goups" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+		</table>
+		<table name="rooms" prior="messages_0" >
+			<comment><![CDATA[Rooms configuration for a group.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Room identifier.]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Group to which the room belongs.]]></comment>
+			</column>
+			<column name="message" type="varchar" length="250" jt="12" mandatory="y" >
+				<comment><![CDATA[Room's name.]]></comment>
+			</column>
+			<column name="active" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[true]]></defo>
+				<comment><![CDATA[Indicates if the room is active.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_rooms" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_rooms_groups" to_schema="groups" to_table="goups" delete_action="restrict" update_action="restrict" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+		</table>
+		<table name="service_number_types" prior="tbl" >
+			<comment><![CDATA[Types of service numbers that can be configured in a group: incoming, outgoing, callback.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Service number type identifier.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Service number type code.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_service_number_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="service_numbers" prior="tbl" >
+			<comment><![CDATA[Group service number.grupo.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Service number identifier.]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Group to which the service number belongs.]]></comment>
+			</column>
+			<column name="service_number_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Type of service number.]]></comment>
+			</column>
+			<column name="phone_number" type="varchar" length="16" jt="12" mandatory="y" >
+				<comment><![CDATA[Service phone number.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_service_numbers" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_service_numbers_goups" to_schema="groups" to_table="goups" options="" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+			<fk name="fk_service_numbers_service_number_types" to_schema="groups" to_table="service_number_types" >
+				<fk_column name="service_number_type_id" pk="id" />
+			</fk>
+		</table>
+		<table name="styles" prior="tbl" >
+			<comment><![CDATA[Configuration of the application styles for each group.]]></comment>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the group to which the configuration belongs.]]></comment>
+			</column>
+			<column name="logo_url" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[Url of the logo to show in the application.aplicación.]]></comment>
+			</column>
+			<column name="primary_color" type="varchar" length="16" jt="12" >
+				<comment><![CDATA[Primary color of the application.]]></comment>
+			</column>
+			<column name="secondary_color" type="varchar" length="16" jt="12" >
+				<comment><![CDATA[Secondary color of the application.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_styles" unique="PRIMARY_KEY" >
+				<column name="group_id" />
+			</index>
+			<fk name="fk_styles_goups" to_schema="groups" to_table="goups" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+		</table>
+		<table name="user_licenses" prior="device_licenses_0" >
+			<comment><![CDATA[License settings for users.]]></comment>
+			<column name="license_id" prior="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the license to which the user license configuration belongs.]]></comment>
+			</column>
+			<column name="max_num_users" prior="max_num_devices" type="smallint" jt="5" >
+				<comment><![CDATA[Maximum number of users allowed in the license.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_user_licenses" unique="PRIMARY_KEY" >
+				<column name="license_id" />
+			</index>
+			<fk name="fk_user_licenses_licenses" to_schema="groups" to_table="licenses" delete_action="restrict" update_action="restrict" >
+				<fk_column name="license_id" pk="group_id" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="measurements" >
+		<table name="group_measure_rules" prior="measure_collected_types_0" spec="" >
+			<comment><![CDATA[Rule associated with a group.]]></comment>
+			<column name="group_id" prior="id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Measure rule identifier.]]></comment>
+			</column>
+			<column name="measure_rule_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Measure rule identifier.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_group_measure_rules" unique="PRIMARY_KEY" >
+				<column name="group_id" />
+				<column name="measure_rule_id" />
+			</index>
+			<fk name="fk_group_measure_rules_measure_rules" to_schema="measurements" to_table="measure_rules" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_rule_id" pk="id" />
+			</fk>
+		</table>
+		<table name="measure_collected_types" prior="measure_types_0" >
+			<comment><![CDATA[Indicates the method by which the measurement was collected.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Measure collected type identifier.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Measurement collected type code.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_collected_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="measure_notes" prior="measure_collected_types_0" >
+			<comment><![CDATA[Notes added to a measure.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Measure note identifier.]]></comment>
+			</column>
+			<column name="measure_id" prior="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Measure to which the measure notes belongs.]]></comment>
+			</column>
+			<column name="note" prior="code" type="text" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Measurement note message.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_notes" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_measure_notes_measures" to_schema="measurements" to_table="measures" >
+				<fk_column name="measure_id" pk="id" />
+			</fk>
+		</table>
+		<table name="measure_resolutions" prior="measure_notes_0" >
+			<comment><![CDATA[Resolution added to a measure.]]></comment>
+			<column name="measure_id" prior="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Measure to which the resolution belongs.]]></comment>
+			</column>
+			<column name="resolution_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Measurement resolution identifier.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_resolutions" unique="PRIMARY_KEY" >
+				<column name="measure_id" />
+			</index>
+			<fk name="fk_measure_resolutions_measures" to_schema="measurements" to_table="measures" >
+				<fk_column name="measure_id" pk="id" />
+			</fk>
+			<fk name="fk_measure_resolutions_resolutions" to_schema="measurements" to_table="resolutions" delete_action="restrict" update_action="restrict" >
+				<fk_column name="resolution_id" pk="id" />
+			</fk>
+		</table>
+		<table name="measure_rules" prior="group_measure_rules" >
+			<comment><![CDATA[Definition of measure rules.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Measure rule identifier.]]></comment>
+			</column>
+			<column name="message_status_id" type="uuid" length="1" jt="102" mandatory="y" >
+				<comment><![CDATA[Indicates the status that will be assigned to the measure if it meets the rule.]]></comment>
+			</column>
+			<column name="measure_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Type of measure on which the rule is applied.]]></comment>
+			</column>
+			<column name="measure_unit_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Unit of measure on which the rule will be applied.]]></comment>
+			</column>
+			<column name="rule_operador_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Operator to use when applying the rule.]]></comment>
+			</column>
+			<column name="reference_value" type="real" jt="7" mandatory="y" >
+				<comment><![CDATA[Rule reference value.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_rules" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_measure_rules_measure_units" to_schema="measurements" to_table="measure_units" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_unit_id" pk="id" />
+			</fk>
+			<fk name="fk_measure_rules_measure_types" to_schema="measurements" to_table="measure_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_type_id" pk="id" />
+			</fk>
+			<fk name="fk_measure_rules_measure_statuses" to_schema="measurements" to_table="measure_statuses" delete_action="restrict" update_action="restrict" >
+				<fk_column name="message_status_id" pk="id" />
+			</fk>
+			<fk name="fk_measure_rules_rule_operators" to_schema="measurements" to_table="rule_operators" delete_action="restrict" update_action="restrict" >
+				<fk_column name="rule_operador_id" pk="id" />
+			</fk>
+		</table>
+		<table name="measure_statuses" prior="measure_collected_types_0" >
+			<comment><![CDATA[Indicates the status of a measure after the rules have been applied.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Measure status identifier.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Measurement status code.]]></comment>
+			</column>
+			<column name="priority" type="smallint" jt="5" mandatory="y" >
+				<comment><![CDATA[Measurement status priority.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_statuses" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="measure_types" prior="measurements_0" >
+			<comment><![CDATA[Types of measures.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Measure type identifier.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Measurement type code.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="measure_types_measure_units" prior="measure_types_0" >
+			<comment><![CDATA[Relationship between the types of measurements and the units in which those measurements can be found.]]></comment>
+			<column name="measure_type_id" prior="id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Measure type identifier.]]></comment>
+			</column>
+			<column name="measure_unit_id" prior="code" type="uuid" length="100" jt="102" mandatory="y" />
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_types_measure_units" unique="PRIMARY_KEY" >
+				<column name="measure_type_id" />
+				<column name="measure_unit_id" />
+			</index>
+			<fk name="fk_measure_types_measure_units_measure_types" to_schema="measurements" to_table="measure_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_type_id" pk="id" />
+			</fk>
+			<fk name="fk_measure_types_measure_units_measure_units" to_schema="measurements" to_table="measure_units" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_unit_id" pk="id" />
+			</fk>
+		</table>
+		<table name="measure_types_peripherals_measure_types" prior="measure_types_measure_units_0" >
+			<comment><![CDATA[Relationship between the types of measurements and the peripheral measure types in which those measurements can be found.]]></comment>
+			<column name="measure_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Measure type identifier.]]></comment>
+			</column>
+			<column name="peripherals_measure_types_id" prior="measure_unit_id" type="uuid" length="100" jt="102" mandatory="y" />
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_types_peripherals_measure_types" unique="PRIMARY_KEY" >
+				<column name="measure_type_id" />
+				<column name="peripherals_measure_types_id" />
+			</index>
+			<fk name="fk_measure_types_measure_units_measure_types_0" to_schema="measurements" to_table="measure_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_type_id" pk="id" />
+			</fk>
+			<fk name="fk_measure_types_peripherals_measure_types" to_schema="measurements" to_table="peripherals_measure_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="peripherals_measure_types_id" pk="id" />
+			</fk>
+		</table>
+		<table name="measure_units" prior="measure_statuses_0" >
+			<comment><![CDATA[Definition of units of measure.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Measure unit identifier.]]></comment>
+			</column>
+			<column name="snomed_ct_code" type="bigint" jt="-5" >
+				<comment><![CDATA[TBD]]></comment>
+			</column>
+			<column name="uom_standard_code_id" type="bigint" jt="-5" >
+				<comment><![CDATA[TBD]]></comment>
+			</column>
+			<column name="unit_conversion" type="real" jt="7" >
+				<comment><![CDATA[TBD]]></comment>
+			</column>
+			<column name="unit_conversion_offset" type="real" jt="7" >
+				<comment><![CDATA[TBD]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_statuses_0" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="measures" prior="measurements" >
+			<comment><![CDATA[Processed measurements sent by a device.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Measure identifier.]]></comment>
+			</column>
+			<column name="measure_collected_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Indicates the method by which the measurement was collected.]]></comment>
+			</column>
+			<column name="measure_raw_id" type="uuid" jt="102" >
+				<comment><![CDATA[Identifier of the raw measure.]]></comment>
+			</column>
+			<column name="peripheral_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the peripheral that generated the measurement.]]></comment>
+			</column>
+			<column name="measure_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifies the type of measurement that has been received.]]></comment>
+			</column>
+			<column name="measure_unit_id" prior="unit_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the unit with which the measurement was made.]]></comment>
+			</column>
+			<column name="measure_status_id" type="uuid" length="1" jt="102" >
+				<comment><![CDATA[Identifier of the status of the measurement once the alarm rules have been applied.]]></comment>
+			</column>
+			<column name="measure_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the measurement was created.]]></comment>
+			</column>
+			<column name="value" type="real" jt="7" mandatory="y" >
+				<comment><![CDATA[Value of the measurement obtained.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measures" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_measures_measures_raw" to_schema="measurements" to_table="measures_raw" >
+				<fk_column name="measure_raw_id" pk="id" />
+			</fk>
+			<fk name="fk_measures_measure_collected_types" to_schema="measurements" to_table="measure_collected_types" >
+				<fk_column name="measure_collected_type_id" pk="id" />
+			</fk>
+			<fk name="fk_measures_measure_statuses" to_schema="measurements" to_table="measure_statuses" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_status_id" pk="id" />
+			</fk>
+			<fk name="fk_measures_measure_units" to_schema="measurements" to_table="measure_units" >
+				<fk_column name="measure_unit_id" pk="id" />
+			</fk>
+			<fk name="fk_measures_measure_types" to_schema="measurements" to_table="measure_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_type_id" pk="id" />
+			</fk>
+		</table>
+		<table name="measures_raw" prior="measurements_raw" >
+			<comment><![CDATA[Measures with the format sent by the device.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Measure Raw identifier.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the patient to whom the measurement belongs.]]></comment>
+			</column>
+			<column name="reception_at" prior="measure_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the measure is received.]]></comment>
+			</column>
+			<column name="value" type="text" jt="12" mandatory="y" >
+				<comment><![CDATA[Measurement sent by the raw device.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measures_raw" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="people_measure_rules" prior="group_measure_rules_0" >
+			<comment><![CDATA[Rule associated with a person.]]></comment>
+			<column name="people_id" prior="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[People identifier.]]></comment>
+			</column>
+			<column name="measure_rule_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Measure rule identifier.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_people_measure_rules" unique="PRIMARY_KEY" >
+				<column name="people_id" />
+				<column name="measure_rule_id" />
+			</index>
+			<fk name="fk_people_measure_rules_measure_rules" to_schema="measurements" to_table="measure_rules" delete_action="restrict" update_action="restrict" >
+				<fk_column name="measure_rule_id" pk="id" />
+			</fk>
+		</table>
+		<table name="peripherals_measure_types" prior="measure_collected_types_0" >
+			<comment><![CDATA[Types of measurements a peripheral can take.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Peripheral measure type identifier.]]></comment>
+			</column>
+			<column name="peripheral_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Peripheral identifier.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="200" jt="12" mandatory="y" >
+				<comment><![CDATA[Peripheral measure type code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Peripheral measure type description.]]></comment>
+			</column>
+			<column name="compressed" type="boolean" jt="-7" />
+			<column name="wait_miliseconds" type="integer" jt="4" />
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_measure_collected_types_0" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="resolutions" prior="measure_collected_types_0" >
+			<comment><![CDATA[Identifier of the resolutions that a measure can have.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Resolution identifier.]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Group to which the resolution belongs.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Resolution code.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_resolutions" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="rule_operators" prior="measure_collected_types_0" >
+			<comment><![CDATA[Operators to use in the rules.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[rule operator identifier.]]></comment>
+			</column>
+			<column name="value" prior="code" type="varchar" length="2" jt="12" mandatory="y" >
+				<comment><![CDATA[Rule operator value.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_rule_operators" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+	</schema>
+	<schema name="notifications" >
+		<table name="notification_responses" prior="notification_types_0" >
+			<comment><![CDATA[Type of notifications that can be created.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Notification type identifier.]]></comment>
+			</column>
+			<column name="notification_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the notification to which the response option belongs]]></comment>
+			</column>
+			<column name="message" prior="code" type="varchar" length="30" jt="12" >
+				<comment><![CDATA[Message to send as reply option]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_notification_responses" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_notification_responses_notifications" to_schema="notifications" to_table="notifications" delete_action="restrict" update_action="restrict" >
+				<fk_column name="notification_id" pk="id" />
+			</fk>
+		</table>
+		<table name="notification_types" prior="notifications_0" >
+			<comment><![CDATA[Type of notifications that can be created.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Notification type identifier.]]></comment>
+			</column>
+			<column name="code" prior="title" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Notification type code.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_notification_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="notifications" spec="" >
+			<comment><![CDATA[Application notification configuration.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Notification identifier.]]></comment>
+			</column>
+			<column name="notification_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Notification type.]]></comment>
+			</column>
+			<column name="title" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Title of the notification.]]></comment>
+			</column>
+			<column name="content" type="varchar" length="300" jt="12" mandatory="y" >
+				<comment><![CDATA[Content of the notification message.]]></comment>
+			</column>
+			<column name="sent" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the notification has been sent.]]></comment>
+			</column>
+			<column name="sended_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the notification was sent.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_notifications" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_notifications_notification_types" to_schema="notifications" to_table="notification_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="notification_type_id" pk="id" />
+			</fk>
+		</table>
+		<table name="notifications_groups" prior="notifications_groups_0" >
+			<comment><![CDATA[Notifications to send to a group.]]></comment>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Group to which the notification belongs]]></comment>
+			</column>
+			<column name="notification_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the notification to which the notification user belongs]]></comment>
+			</column>
+			<column name="send_to_subgroup" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the message has to be sent to the subgroups.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_notifications_groups_notifications" unique="PRIMARY_KEY" >
+				<column name="group_id" />
+				<column name="notification_id" />
+			</index>
+			<fk name="fk_notifications_groups_notifications" to_schema="notifications" to_table="notifications" delete_action="restrict" update_action="restrict" >
+				<fk_column name="notification_id" pk="id" />
+			</fk>
+		</table>
+		<table name="notifications_users" prior="notification_responses_0" >
+			<comment><![CDATA[Notifications to send to a user.]]></comment>
+			<column name="people_id" prior="user_id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[People to which the notification belongs]]></comment>
+			</column>
+			<column name="notification_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the notification to which the notification user belongs]]></comment>
+			</column>
+			<column name="response" prior="message" type="varchar" length="20" jt="12" >
+				<comment><![CDATA[Response message.]]></comment>
+			</column>
+			<column name="seen" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates whether the message has been seen by the user.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_notifications_users_notifications" unique="PRIMARY_KEY" >
+				<column name="people_id" />
+				<column name="notification_id" />
+			</index>
+			<fk name="fk_notifications_users_notifications" to_schema="notifications" to_table="notifications" delete_action="restrict" update_action="restrict" >
+				<fk_column name="notification_id" pk="id" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="people" >
+		<table name="addresses" prior="ethnicities_0" >
+			<comment><![CDATA[User's home address.]]></comment>
+			<column name="personal_information_id" prior="id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Personal information identifier.]]></comment>
+			</column>
+			<column name="street" prior="code" type="varchar" length="200" jt="12" mandatory="y" >
+				<comment><![CDATA[Street address.]]></comment>
+			</column>
+			<column name="city" prior="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Address city.]]></comment>
+			</column>
+			<column name="country" type="varchar" length="45" jt="12" >
+				<comment><![CDATA[Country.]]></comment>
+			</column>
+			<column name="postal_code" type="varchar" length="45" jt="12" >
+				<comment><![CDATA[Postal code.]]></comment>
+			</column>
+			<column name="state" type="varchar" length="45" jt="12" >
+				<comment><![CDATA[Address state.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_addresses" unique="PRIMARY_KEY" >
+				<column name="personal_information_id" />
+			</index>
+			<fk name="fk_addresses_personal_information" to_schema="people" to_table="personal_information" delete_action="restrict" update_action="restrict" >
+				<fk_column name="personal_information_id" pk="id" />
+			</fk>
+		</table>
+		<table name="contact_information" prior="people_0" >
+			<comment><![CDATA[User contact information.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[People contact information identificador.]]></comment>
+			</column>
+			<column name="people_id" prior="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[People to which the contact information belongs.]]></comment>
+			</column>
+			<column name="service_number" type="bigint" jt="-5" >
+				<comment><![CDATA[Contact phone number.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_contact_information" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_contact_information_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+		</table>
+		<table name="education_levels" prior="languages_0" >
+			<comment><![CDATA[Education level definition.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Education level identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Education level code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Education level description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_education_levels" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="environments" prior="races_0" >
+			<comment><![CDATA[Data referring to the environment in which the user is located, for example, electricity contracts, water, etc.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Environments identificador.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[People identifier.]]></comment>
+			</column>
+			<column name="service" prior="code" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Service provided in the environment.]]></comment>
+			</column>
+			<column name="company" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Company offering the service.]]></comment>
+			</column>
+			<column name="client_contract_id" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Contract identification number.]]></comment>
+			</column>
+			<column name="observations" prior="description" type="text" length="100" jt="12" >
+				<comment><![CDATA[Observations to be made about the environment.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_environments" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_environments_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+		</table>
+		<table name="ethnicities" prior="education_levels_0" >
+			<comment><![CDATA[Ethnicity definition.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Ethnicity identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Ethnicity code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Ethnicity description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_ethnicities" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="genders" prior="contact_information_0" >
+			<comment><![CDATA[Gender information.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Gender identificador.]]></comment>
+			</column>
+			<column name="code" prior="service_number" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Gender code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Gender description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_genders" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="general_contact_information" prior="contact_information_0" >
+			<comment><![CDATA[General contact information.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[General contact information identificador.]]></comment>
+			</column>
+			<column name="contact_information_id" prior="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Contact information to which the contact information belongs.]]></comment>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Name of the general contact.]]></comment>
+			</column>
+			<column name="phone_number" prior="service_number" type="bigint" jt="-5" mandatory="y" >
+				<comment><![CDATA[Contact phone number.]]></comment>
+			</column>
+			<column name="address" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Contact address.]]></comment>
+			</column>
+			<column name="ambit" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Ambit of the contact.]]></comment>
+			</column>
+			<column name="attention_hours" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Contact hours of attention.]]></comment>
+			</column>
+			<column name="type" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[General contact type.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_general_contact_information" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_general_contact_information_contact_information" to_schema="people" to_table="contact_information" delete_action="restrict" update_action="restrict" >
+				<fk_column name="contact_information_id" pk="id" />
+			</fk>
+		</table>
+		<table name="health_center" prior="note_types_0" >
+			<comment><![CDATA[Health center information.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Health center identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Health center code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Health center description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_health_center" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="health_condition_types" prior="health_condition_type" >
+			<comment><![CDATA[Health condition type.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Health condition type identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Health condition type code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Health condition type description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_health_condition_type" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="health_conditions" prior="notes_0" >
+			<comment><![CDATA[Health conditions data.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Health conditions identificador.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Data on the user's health condition.]]></comment>
+			</column>
+			<column name="health_condition_type_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Type of health condition showing information.]]></comment>
+			</column>
+			<column name="date_diagnosis" type="date" jt="91" mandatory="y" >
+				<comment><![CDATA[Date diagnosis.]]></comment>
+			</column>
+			<column name="type" type="varchar" length="30" jt="12" mandatory="y" >
+				<comment><![CDATA[Helth condition type.]]></comment>
+			</column>
+			<column name="medications" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[Medication taken by the user for a diagnosis.]]></comment>
+			</column>
+			<column name="observations" type="text" jt="12" >
+				<comment><![CDATA[Observations about health condition.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_health_conditions" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_health_condition_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+			<fk name="fk_health_conditions_health_condition_types" to_schema="people" to_table="health_condition_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="health_condition_type_id" pk="id" />
+			</fk>
+		</table>
+		<table name="health_services" prior="situations_0" >
+			<comment><![CDATA[Description of the health services contracted by the user.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Healt service identificador.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the user who has the healt service.]]></comment>
+			</column>
+			<column name="health_center_id" type="uuid" jt="102" >
+				<comment><![CDATA[Identifier of the health center that offers the service.]]></comment>
+			</column>
+			<column name="account" prior="situation" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[Health service account identifier.]]></comment>
+			</column>
+			<column name="care_coordinator" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[Service Coordinator.]]></comment>
+			</column>
+			<column name="primary_care" type="varchar" length="200" jt="12" />
+			<column name="phone_number" type="bigint" jt="-5" >
+				<comment><![CDATA[Service phone number.]]></comment>
+			</column>
+			<column name="notes" type="text" length="600" jt="12" >
+				<comment><![CDATA[Notes about the health service.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_health_services" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_health_services_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+			<fk name="fk_health_services_health_center" to_schema="people" to_table="health_center" delete_action="restrict" update_action="restrict" >
+				<fk_column name="health_center_id" pk="id" />
+			</fk>
+		</table>
+		<table name="languages" prior="marital_status_0" >
+			<comment><![CDATA[Languages definition.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Language identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Language code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Language description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_languages" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="marital_status" prior="marital_status_types" >
+			<comment><![CDATA[Marital status]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Marital status type identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Marital status type code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Marital status type description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_marital_status" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="medicines" prior="vaccines_0" >
+			<comment><![CDATA[Information on the medicines taken by the user.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Medicines identificador.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the user who has the medicine.]]></comment>
+			</column>
+			<column name="name" prior="description" type="varchar" length="200" jt="12" mandatory="y" >
+				<comment><![CDATA[Medicine name.]]></comment>
+			</column>
+			<column name="dossage" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[Dosage of medicine to be taken by the user.]]></comment>
+			</column>
+			<column name="taken_for" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[Frequency with which the medicine has to be taken.]]></comment>
+			</column>
+			<column name="observations" type="text" jt="12" >
+				<comment><![CDATA[Observations about vaccine.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_medicines" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_medicines_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+		</table>
+		<table name="modules" prior="permissions_0" >
+			<comment><![CDATA[Definition of the application modules.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Module Identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Module code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Module description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_modules" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="note_types" prior="genders_0" >
+			<comment><![CDATA[Type of notes that can be created.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Note type identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Note type code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Note type description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_note_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="notes" prior="genders_0" >
+			<comment><![CDATA[Patient notes.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Patient notes identificador.]]></comment>
+			</column>
+			<column name="note_type_id" type="uuid" length="600" jt="102" mandatory="y" >
+				<comment><![CDATA[Note type.]]></comment>
+			</column>
+			<column name="text" prior="description" type="text" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Patient note text.]]></comment>
+			</column>
+			<column name="applied_by" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[User who created the note.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_notes" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_notes_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="applied_by" pk="id" />
+			</fk>
+			<fk name="fk_notes_note_types" to_schema="people" to_table="note_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="note_type_id" pk="id" />
+			</fk>
+		</table>
+		<table name="people" prior="users" >
+			<comment><![CDATA[Definition of the people of the application.]]></comment>
+			<column name="id" prior="user_id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[People Identificador.]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Group to which the person belongs.]]></comment>
+			</column>
+			<column name="first_name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[User first name.]]></comment>
+			</column>
+			<column name="middle_name" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[User middle name.]]></comment>
+			</column>
+			<column name="first_surname" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[User first surname]]></comment>
+			</column>
+			<column name="second_surname" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[User second surname.]]></comment>
+			</column>
+			<column name="birthdate" type="date" jt="91" >
+				<comment><![CDATA[User birthdate.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_people" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="unq_people_group_id" unique="UNIQUE_KEY" >
+				<column name="group_id" />
+			</index>
+			<fk name="fk_people_goups" to_schema="groups" to_table="goups" delete_action="restrict" update_action="restrict" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+		</table>
+		<table name="permissions" prior="roles_0" >
+			<comment><![CDATA[Permissions that can be assigned to the different parts of the application.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Permission Identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Permission code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Permission description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_permissions" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="permissions_modules" prior="roles_permissions_0" >
+			<comment><![CDATA[Relationship between modules and permissions.]]></comment>
+			<column name="module_id" prior="role_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Module identifier.]]></comment>
+			</column>
+			<column name="permission_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Permission Identificador.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_permissions_modules" unique="PRIMARY_KEY" >
+				<column name="permission_id" />
+				<column name="module_id" />
+			</index>
+			<fk name="fk_permissions_modules_modules" to_schema="people" to_table="modules" delete_action="restrict" update_action="restrict" >
+				<fk_column name="module_id" pk="id" />
+			</fk>
+			<fk name="fk_permissions_modules_permissions" to_schema="people" to_table="permissions" delete_action="restrict" update_action="restrict" >
+				<fk_column name="permission_id" pk="id" />
+			</fk>
+		</table>
+		<table name="personal_contact_information" prior="general_contact_information_0" >
+			<comment><![CDATA[Personal contact information.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Personal contact information identificador.]]></comment>
+			</column>
+			<column name="contact_information_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Contact information to which the contact information belongs.]]></comment>
+			</column>
+			<column name="relative_type_id" prior="relationship_type_id" type="uuid" length="100" jt="102" mandatory="y" >
+				<comment><![CDATA[Identify the relationship type of the contact.]]></comment>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Name of the personal contact.]]></comment>
+			</column>
+			<column name="phone_number" type="bigint" jt="-5" mandatory="y" >
+				<comment><![CDATA[Contact phone number.]]></comment>
+			</column>
+			<column name="priority" prior="address" type="smallint" length="100" jt="5" >
+				<comment><![CDATA[Priority of the contact to make the call.]]></comment>
+			</column>
+			<column name="live_with" prior="attention_hours" type="boolean" length="100" jt="-7" >
+				<comment><![CDATA[Indicates if the contact lives with the user.]]></comment>
+			</column>
+			<column name="has_keys" prior="type" type="boolean" length="100" jt="-7" >
+				<comment><![CDATA[Indicates if the contact has the keys to the user's house.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_personal_contact_information" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_personal_contact_information_contact_information" to_schema="people" to_table="contact_information" delete_action="restrict" update_action="restrict" >
+				<fk_column name="contact_information_id" pk="id" />
+			</fk>
+			<fk name="fk_personal_contact_information_relative_types" to_schema="people" to_table="relative_types" delete_action="restrict" update_action="restrict" >
+				<fk_column name="relative_type_id" pk="id" />
+			</fk>
+		</table>
+		<table name="personal_information" prior="contact_information_0" >
+			<comment><![CDATA[Personal information of the user.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Personal information identificador.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[People to which the contact information belongs.]]></comment>
+			</column>
+			<column name="education_level_id" type="uuid" jt="102" >
+				<comment><![CDATA[Education level identifier.]]></comment>
+			</column>
+			<column name="ethnicity_id" type="uuid" jt="102" >
+				<comment><![CDATA[Ethnicity identifier.]]></comment>
+			</column>
+			<column name="gender_id" prior="sex_id" type="uuid" jt="102" >
+				<comment><![CDATA[Identifier of the user's gender.]]></comment>
+			</column>
+			<column name="language_id" type="uuid" jt="102" >
+				<comment><![CDATA[Language identifier.]]></comment>
+			</column>
+			<column name="marital_status_id" type="uuid" length="1" jt="102" >
+				<comment><![CDATA[Marital status identifier.]]></comment>
+			</column>
+			<column name="race_id" type="uuid" jt="102" >
+				<comment><![CDATA[Race identificator.]]></comment>
+			</column>
+			<column name="email" type="varchar" length="45" jt="12" >
+				<comment><![CDATA[Email address]]></comment>
+			</column>
+			<column name="id_card" type="varchar" length="45" jt="12" >
+				<comment><![CDATA[User identification document.]]></comment>
+			</column>
+			<column name="phone1" type="varchar" length="45" jt="12" >
+				<comment><![CDATA[Phone number.]]></comment>
+			</column>
+			<column name="phone2" type="varchar" length="45" jt="12" >
+				<comment><![CDATA[Phone number.]]></comment>
+			</column>
+			<column name="height" type="real" jt="7" >
+				<comment><![CDATA[User height.]]></comment>
+			</column>
+			<column name="weight_baseline" type="real" jt="7" mandatory="y" >
+				<comment><![CDATA[Initial weight of the user.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_personal_information" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_personal_information_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+			<fk name="fk_personal_information_genders" to_schema="people" to_table="genders" delete_action="restrict" update_action="restrict" >
+				<fk_column name="gender_id" pk="id" />
+			</fk>
+			<fk name="fk_personal_information_races" to_schema="people" to_table="races" delete_action="restrict" update_action="restrict" >
+				<fk_column name="race_id" pk="id" />
+			</fk>
+			<fk name="fk_personal_information_marital_status_types" to_schema="people" to_table="marital_status" delete_action="restrict" update_action="restrict" >
+				<fk_column name="marital_status_id" pk="id" />
+			</fk>
+			<fk name="fk_personal_information_languages" to_schema="people" to_table="languages" delete_action="restrict" update_action="restrict" >
+				<fk_column name="language_id" pk="id" />
+			</fk>
+			<fk name="fk_personal_information_education_levels" to_schema="people" to_table="education_levels" delete_action="restrict" update_action="restrict" >
+				<fk_column name="education_level_id" pk="id" />
+			</fk>
+			<fk name="fk_personal_information_ethnicities" to_schema="people" to_table="ethnicities" delete_action="restrict" update_action="restrict" >
+				<fk_column name="ethnicity_id" pk="id" />
+			</fk>
+		</table>
+		<table name="pets" prior="environments_0" >
+			<comment><![CDATA[Description of the user's pets.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Pet identificador.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[People identifier.]]></comment>
+			</column>
+			<column name="type" prior="service" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Pet type.]]></comment>
+			</column>
+			<column name="name" prior="company" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Pet name.]]></comment>
+			</column>
+			<column name="aggresive" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the pet is aggressive.]]></comment>
+			</column>
+			<column name="vaccines" type="varchar" length="250" jt="12" >
+				<comment><![CDATA[Information about the vaccinations given to the pet.]]></comment>
+			</column>
+			<column name="chip_id" prior="client_contract_id" type="varchar" length="20" jt="12" >
+				<comment><![CDATA[Pet chip identification number.]]></comment>
+			</column>
+			<column name="observations" type="text" length="100" jt="12" >
+				<comment><![CDATA[Observations to be made about the pet.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_pets" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_pets_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+		</table>
+		<table name="professinal_settings" prior="settings_measure_units_0" >
+			<comment><![CDATA[Configuration that a professional has selected.]]></comment>
+			<column name="professional_id" prior="id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Professional identifier.]]></comment>
+			</column>
+			<column name="settings_date_format_id" type="uuid" jt="102" >
+				<comment><![CDATA[Date format setting identifier.]]></comment>
+			</column>
+			<column name="settings_language_id" type="uuid" jt="102" >
+				<comment><![CDATA[Identifier of the language selected by the professional.]]></comment>
+			</column>
+			<column name="settings_measure_unit_id" type="uuid" jt="102" >
+				<comment><![CDATA[Identifier of the unit of measure selected by the professional.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_professinal_settings" unique="PRIMARY_KEY" >
+				<column name="professional_id" />
+			</index>
+			<fk name="fk_professional_settings_settings_date_formats" to_schema="people" to_table="settings_date_formats" delete_action="restrict" update_action="restrict" >
+				<fk_column name="settings_date_format_id" pk="id" />
+			</fk>
+			<fk name="fk_professinal_settings_settings_measure_units" to_schema="people" to_table="settings_measure_units" delete_action="restrict" update_action="restrict" >
+				<fk_column name="settings_measure_unit_id" pk="id" />
+			</fk>
+			<fk name="fk_professinal_settings_settings_languages" to_schema="people" to_table="settings_language" delete_action="restrict" update_action="restrict" >
+				<fk_column name="settings_language_id" pk="id" />
+			</fk>
+			<fk name="fk_professinal_settings_professionals" to_schema="people" to_table="professionals" delete_action="restrict" update_action="restrict" >
+				<fk_column name="professional_id" pk="user_id" />
+			</fk>
+		</table>
+		<table name="professionals" prior="professinals" >
+			<comment><![CDATA[Professional data.]]></comment>
+			<column name="user_id" prior="id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Professional identifier.]]></comment>
+			</column>
+			<column name="group_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Group to which the professional belongs.]]></comment>
+			</column>
+			<column name="first_name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Professional first name.]]></comment>
+			</column>
+			<column name="middle_name" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Professional middle name.]]></comment>
+			</column>
+			<column name="last_name" type="varchar" length="100" jt="12" mandatory="y" >
+				<comment><![CDATA[Professional last name.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_professional" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_professionals_goups" to_schema="groups" to_table="goups" delete_action="restrict" update_action="restrict" >
+				<fk_column name="group_id" pk="id" />
+			</fk>
+			<fk name="fk_professionals_users" to_schema="people" to_table="users" delete_action="restrict" update_action="restrict" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+		</table>
+		<table name="races" prior="genders_0" >
+			<comment><![CDATA[Race information.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Race identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Race code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Race description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_races" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="relative_types" prior="races_0" >
+			<comment><![CDATA[Relative types.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Relative type identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Relative type code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Relative type description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_relative_types" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="roles" prior="roles_0" >
+			<comment><![CDATA[Definition of the roles of the application.
+
+enum('superadministrator', 'administrator', 'standard', 'apirest', 'installer', 'nurse', 'patient', 'none', 'relative')]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Role Identificador.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="10" jt="12" mandatory="y" >
+				<comment><![CDATA[Application role code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Application role description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_roles" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="roles_permissions" prior="permissions_0" >
+			<comment><![CDATA[Relationship between roles and permissions.]]></comment>
+			<column name="role_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Role identifier.]]></comment>
+			</column>
+			<column name="permission_id" prior="id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Permission Identificador.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_roles_permissions" unique="PRIMARY_KEY" >
+				<column name="permission_id" />
+				<column name="role_id" />
+			</index>
+			<fk name="fk_roles_permissions_roles" to_schema="people" to_table="roles" delete_action="restrict" update_action="restrict" >
+				<fk_column name="role_id" pk="id" />
+			</fk>
+			<fk name="fk_roles_permissions_permissions" to_schema="people" to_table="permissions" delete_action="restrict" update_action="restrict" >
+				<fk_column name="permission_id" pk="id" />
+			</fk>
+		</table>
+		<table name="settings_date_formats" prior="relative_types_0" >
+			<comment><![CDATA[Formats in which dates can be displayed in the application.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Settings date format identifier.]]></comment>
+			</column>
+			<column name="code" prior="value" type="varchar" length="32" jt="12" mandatory="y" >
+				<comment><![CDATA[Date format code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Date format description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_settings_date_formats" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="settings_language" prior="settings_date_formats_0" >
+			<comment><![CDATA[Language in which application can be displayed.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Settings language identifier.]]></comment>
+			</column>
+			<column name="code" type="varchar" length="32" jt="12" mandatory="y" >
+				<comment><![CDATA[Language code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Language description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_settings_language" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="settings_measure_units" prior="settings_date_formats_0" >
+			<comment><![CDATA[Units in which measures can be displayed in the application.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Settings measure unit identifier.]]></comment>
+			</column>
+			<column name="code" prior="value" type="varchar" length="32" jt="12" mandatory="y" >
+				<comment><![CDATA[Measure unit code.]]></comment>
+			</column>
+			<column name="description" type="varchar" length="100" jt="12" >
+				<comment><![CDATA[Measure unit description.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_settings_measure_units" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="situations" prior="medicines_0" >
+			<comment><![CDATA[Determine the physical, cognitive and social situations of the user.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Situations identificador.]]></comment>
+			</column>
+			<column name="people_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the user who has the situation.]]></comment>
+			</column>
+			<column name="situation" prior="name" type="varchar" length="200" jt="12" mandatory="y" >
+				<comment><![CDATA[Situtation description.]]></comment>
+			</column>
+			<column name="date" prior="taken_for" type="date" length="200" jt="91" mandatory="y" >
+				<comment><![CDATA[Date on which the situation occurred.]]></comment>
+			</column>
+			<column name="observations" type="text" jt="12" >
+				<comment><![CDATA[Observations about situation.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_situations" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_situations_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+		</table>
+		<table name="users" prior="users_0" >
+			<comment><![CDATA[Definition of the users of the application.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[User Identificador.]]></comment>
+			</column>
+			<column name="username" type="varchar" length="250" jt="12" mandatory="y" >
+				<comment><![CDATA[Username with which to access the application.]]></comment>
+			</column>
+			<column name="password" type="varchar" length="250" jt="12" mandatory="y" >
+				<comment><![CDATA[Password with which to access the application.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_users" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="users_roles" prior="permissions_modules_0" >
+			<comment><![CDATA[Relationship between users and roles.]]></comment>
+			<column name="user_id" prior="module_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[User identifier.]]></comment>
+			</column>
+			<column name="role_id" prior="permission_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Role Identificador.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_users_roles" unique="PRIMARY_KEY" >
+				<column name="role_id" />
+				<column name="user_id" />
+			</index>
+			<fk name="fk_users_roles_users" to_schema="people" to_table="users" delete_action="restrict" update_action="restrict" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_users_roles_roles" to_schema="people" to_table="roles" delete_action="restrict" update_action="restrict" >
+				<fk_column name="role_id" pk="id" />
+			</fk>
+		</table>
+		<table name="vaccines" prior="notes_0" >
+			<comment><![CDATA[Vaccines that have been administered to the user.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Vaccines identificador.]]></comment>
+			</column>
+			<column name="people_id" prior="applied_by" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Identifier of the user who has the vaccine.]]></comment>
+			</column>
+			<column name="health_center_id" type="uuid" jt="102" >
+				<comment><![CDATA[Identifier of the health center where the vaccine was administered.]]></comment>
+			</column>
+			<column name="administration_date" type="date" jt="91" mandatory="y" >
+				<comment><![CDATA[Date of vaccine administration.]]></comment>
+			</column>
+			<column name="description" prior="text" type="varchar" length="200" jt="12" mandatory="y" >
+				<comment><![CDATA[Vaccine information.]]></comment>
+			</column>
+			<column name="observations" type="text" jt="12" >
+				<comment><![CDATA[Observations about vaccine.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_vaccines" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_vaccines_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="people_id" pk="id" />
+			</fk>
+			<fk name="fk_vaccines_health_center" to_schema="people" to_table="health_center" delete_action="restrict" update_action="restrict" >
+				<fk_column name="health_center_id" pk="id" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="services" >
+		<table name="services" prior="tbl" >
+			<comment><![CDATA[Configuration of services associated with a patient.]]></comment>
+			<column name="id" type="uuid" jt="102" mandatory="y" >
+				<defo><![CDATA[gen_random_uuid()]]></defo>
+				<comment><![CDATA[Service identifier.]]></comment>
+			</column>
+			<column name="patient_id" type="uuid" jt="102" mandatory="y" >
+				<comment><![CDATA[Patient identifier.]]></comment>
+			</column>
+			<column name="client_id" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[Client identifier.]]></comment>
+			</column>
+			<column name="company" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[Company offering the service.]]></comment>
+			</column>
+			<column name="observations" type="varchar" length="200" jt="12" >
+				<comment><![CDATA[Added remarks about the service.]]></comment>
+			</column>
+			<column name="service_type" type="varchar" length="200" jt="12" mandatory="y" >
+				<comment><![CDATA[Type of service selected.]]></comment>
+			</column>
+			<column name="created_at" type="timestamptz" jt="93" mandatory="y" >
+				<comment><![CDATA[Date on which the record was created.]]></comment>
+			</column>
+			<column name="created_by" type="varchar" length="36" jt="12" mandatory="y" >
+				<comment><![CDATA[User who created the record.]]></comment>
+			</column>
+			<column name="updated_at" type="timestamptz" jt="93" >
+				<comment><![CDATA[Date on which the record was modified.]]></comment>
+			</column>
+			<column name="updated_by" type="varchar" length="36" jt="12" >
+				<comment><![CDATA[User who has updated the record.]]></comment>
+			</column>
+			<column name="deleted" type="boolean" jt="-7" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+				<comment><![CDATA[Indicates if the record has been deleted.]]></comment>
+			</column>
+			<index name="pk_services" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_services_people" to_schema="people" to_table="people" delete_action="restrict" update_action="restrict" >
+				<fk_column name="patient_id" pk="group_id" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="MyDb" database="MySql" host="localhost" port="3306" user="root" useSystemProxy="false" />
+	<layout name="Alarms Layout" id="Layout-1496" show_column_type="y" show_relation="name" >
+		<entity schema="alarms" name="action_types" color="3986C1" x="48" y="64" />
+		<entity schema="alarms" name="alarm_actions" color="3986C1" x="432" y="64" />
+		<entity schema="alarms" name="alarm_types" color="3986C1" x="1312" y="48" />
+		<entity schema="alarms" name="alarms" color="C1D8EE" x="896" y="64" />
+	</layout>
+	<layout name="Devices Layout" id="Layout-bbe" show_column_type="y" show_relation="name" >
+		<entity schema="devices" name="device_registration_states" color="3986C1" x="48" y="48" />
+		<entity schema="devices" name="device_statuses" color="3986C1" x="48" y="288" />
+		<entity schema="devices" name="device_types" color="3986C1" x="768" y="96" />
+		<entity schema="devices" name="devices" color="C1D8EE" x="416" y="96" />
+	</layout>
+	<layout name="Events Layout" id="Layout-2675" show_relation="columns" />
+	<layout name="Group Layout" id="Layout-111" show_column_type="y" show_relation="name" >
+		<entity schema="groups" name="dashboards" color="BED3F4" x="768" y="672" />
+		<entity schema="groups" name="device_licenses" color="C7F4BE" x="1760" y="80" />
+		<entity schema="groups" name="goups" color="BED3F4" x="384" y="368" />
+		<entity schema="groups" name="licenses" color="C7F4BE" x="1456" y="80" />
+		<entity schema="groups" name="messages" color="BED3F4" x="384" y="672" />
+		<entity schema="groups" name="reports" color="BED3F4" x="80" y="672" />
+		<entity schema="groups" name="rooms" color="BED3F4" x="80" y="384" />
+		<entity schema="groups" name="service_number_types" color="BED3F4" x="1104" y="368" />
+		<entity schema="groups" name="service_numbers" color="BED3F4" x="768" y="368" />
+		<entity schema="groups" name="styles" color="BED3F4" x="48" y="80" />
+		<entity schema="groups" name="user_licenses" color="C7F4BE" x="1440" y="352" />
+		<group name="licenses" color="EEF7EC" >
+			<entity schema="groups" name="licenses" />
+			<entity schema="groups" name="device_licenses" />
+			<entity schema="groups" name="user_licenses" />
+		</group>
+		<group name="goups" color="ECF0F7" >
+			<entity schema="groups" name="goups" />
+			<entity schema="groups" name="service_numbers" />
+			<entity schema="groups" name="dashboards" />
+			<entity schema="groups" name="messages" />
+			<entity schema="groups" name="reports" />
+			<entity schema="groups" name="rooms" />
+			<entity schema="groups" name="styles" />
+			<entity schema="groups" name="service_number_types" />
+		</group>
+	</layout>
+	<layout name="Measurements Layout" id="Layout-1e24" show_column_type="y" show_relation="name" >
+		<entity schema="measurements" name="group_measure_rules" color="BED3F4" x="128" y="48" />
+		<entity schema="measurements" name="measure_collected_types" color="BED3F4" x="1664" y="704" />
+		<entity schema="measurements" name="measure_notes" color="BED3F4" x="1040" y="48" />
+		<entity schema="measurements" name="measure_resolutions" color="BED3F4" x="1328" y="48" />
+		<entity schema="measurements" name="measure_rules" color="BED3F4" x="400" y="352" />
+		<entity schema="measurements" name="measure_statuses" color="BED3F4" x="816" y="352" />
+		<entity schema="measurements" name="measure_types" color="BED3F4" x="96" y="800" />
+		<entity schema="measurements" name="measure_types_measure_units" color="3986C1" x="448" y="816" />
+		<entity schema="measurements" name="measure_types_peripherals_measure_types" color="3986C1" x="192" y="1072" />
+		<entity schema="measurements" name="measure_units" color="BED3F4" x="816" y="800" />
+		<entity schema="measurements" name="measures" color="BED3F4" x="1168" y="352" />
+		<entity schema="measurements" name="measures_raw" color="BED3F4" x="1552" y="352" />
+		<entity schema="measurements" name="people_measure_rules" color="BED3F4" x="496" y="48" />
+		<entity schema="measurements" name="peripherals_measure_types" color="3986C1" x="672" y="1088" />
+		<entity schema="measurements" name="resolutions" color="BED3F4" x="1616" y="48" />
+		<entity schema="measurements" name="rule_operators" color="BED3F4" x="48" y="368" />
+	</layout>
+	<layout name="Notifications Layout" id="Layout-ada" show_column_type="y" show_relation="name" >
+		<entity schema="notifications" name="notification_responses" color="3986C1" x="944" y="48" />
+		<entity schema="notifications" name="notification_types" color="3986C1" x="944" y="304" />
+		<entity schema="notifications" name="notifications" color="3986C1" x="432" y="128" />
+		<entity schema="notifications" name="notifications_groups" color="3986C1" x="48" y="320" />
+		<entity schema="notifications" name="notifications_users" color="3986C1" x="48" y="48" />
+	</layout>
+	<layout name="People Layout" id="Layout-1289" show_column_type="y" show_relation="name" >
+		<entity schema="people" name="addresses" color="3986C1" x="384" y="1200" />
+		<entity schema="people" name="contact_information" color="3986C1" x="1616" y="752" />
+		<entity schema="people" name="education_levels" color="3986C1" x="336" y="944" />
+		<entity schema="people" name="environments" color="3986C1" x="1632" y="1360" />
+		<entity schema="people" name="ethnicities" color="3986C1" x="48" y="1040" />
+		<entity schema="people" name="genders" color="3986C1" x="496" y="288" />
+		<entity schema="people" name="general_contact_information" color="3986C1" x="1968" y="704" />
+		<entity schema="people" name="health_center" color="3986C1" x="1696" y="64" />
+		<entity schema="people" name="health_condition_types" color="3986C1" x="1024" y="48" />
+		<entity schema="people" name="health_conditions" color="3986C1" x="1008" y="352" />
+		<entity schema="people" name="health_services" color="3986C1" x="2320" y="48" />
+		<entity schema="people" name="languages" color="3986C1" x="336" y="736" />
+		<entity schema="people" name="marital_status" color="3986C1" x="448" y="496" />
+		<entity schema="people" name="medicines" color="3986C1" x="2000" y="304" />
+		<entity schema="people" name="modules" color="3986C1" x="3312" y="384" />
+		<entity schema="people" name="note_types" color="3986C1" x="1312" y="64" />
+		<entity schema="people" name="notes" color="3986C1" x="1328" y="352" />
+		<entity schema="people" name="people" color="3986C1" x="1200" y="752" />
+		<entity schema="people" name="permissions" color="3986C1" x="4064" y="384" />
+		<entity schema="people" name="permissions_modules" color="3986C1" x="3744" y="384" />
+		<entity schema="people" name="personal_contact_information" color="3986C1" x="1968" y="1008" />
+		<entity schema="people" name="personal_information" color="3986C1" x="816" y="848" />
+		<entity schema="people" name="pets" color="3986C1" x="1568" y="1024" />
+		<entity schema="people" name="professinal_settings" color="3986C1" x="2928" y="928" />
+		<entity schema="people" name="professionals" color="3986C1" x="2912" y="512" />
+		<entity schema="people" name="races" color="3986C1" x="752" y="480" />
+		<entity schema="people" name="relative_types" color="3986C1" x="1984" y="1392" />
+		<entity schema="people" name="roles" color="3986C1" x="3712" y="96" />
+		<entity schema="people" name="roles_permissions" color="3986C1" x="4080" y="96" />
+		<entity schema="people" name="settings_date_formats" color="3986C1" x="3360" y="1040" />
+		<entity schema="people" name="settings_language" color="3986C1" x="2768" y="1312" />
+		<entity schema="people" name="settings_measure_units" color="3986C1" x="3248" y="1328" />
+		<entity schema="people" name="situations" color="3986C1" x="2032" y="48" />
+		<entity schema="people" name="users" color="3986C1" x="2912" y="96" />
+		<entity schema="people" name="users_roles" color="3986C1" x="3312" y="96" />
+		<entity schema="people" name="vaccines" color="3986C1" x="1712" y="304" />
+	</layout>
+	<layout name="Services Layout" id="Layout-11b7" show_column_type="y" show_relation="name" >
+		<entity schema="services" name="services" color="C1D8EE" x="48" y="48" />
+	</layout>
+</project>
